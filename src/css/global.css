@@ -1,1 +1,45 @@
 @import url(./reset.css);
+
+main {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background-image: url("../images/wall.png");
+}
+.menu {
+  height: 90px;
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  background-color: #000000;
+  color: #ffffff;
+}
+.panel {
+  margin-top: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.square {
+  height: 150px;
+  width: 150px;
+  border: 1px solid black;
+  background-color: #7fffd4;
+}
+.enemy {
+  background-image: url("../images/ralph.png");
+  background-size: cover;
+}
+.menu-lives {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+div h2:nth-child(1) {
+  margin-bottom: 1rem;
+  color: #ff0000;
+}
+img {
+ height: 60px;
+}
