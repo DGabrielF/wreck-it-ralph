@@ -6,13 +6,15 @@ const state = {
     score: document.querySelector("#score"),
   },
   values: {
-    timerID: setInterval(randomSquare, 1000),
-    countDownTimerId: setInterval(countDown, 1000),
     enemyVelocity: 1000,
     hitPosition: 0,
     result: 0,
     pointsPerHit: 1,
     currentTime: 60,
+  },
+  actions: {    
+    timerID: setInterval(randomSquare, 1000),
+    countDownTimerId: setInterval(countDown, 1000),
   }
 }
 function countDown() {
@@ -20,8 +22,8 @@ function countDown() {
   state.view.timeLeft.textContent = state.values.currentTime;
 
   if (state.values.currentTime<=0) {
-    clearInterval(state.action.countDownTimerId)
-    clearInterval(state.action.TimerId)
+    clearInterval(state.actions.timerId)
+    clearInterval(state.actions.countDownTimerId)
     alert(`Game over! O seu resultado foi ${state.values.result}`)
   }
 }
@@ -35,7 +37,11 @@ function randomSquare() {
   randomSquare.classList.add("enemy")
   state.values.hitPosition = randomSquare.id
 }
-
+function playSound(audioName) {
+  let audio = new Audio(`.src/audios/${audioName}.m4a`);
+  audio.volume = 0.3;
+  audio.play()
+}
 
 function addListennerHitBox() {
   state.view.squares.forEach((square) => {
@@ -44,15 +50,14 @@ function addListennerHitBox() {
         state.values.result+=state.values.pointsPerHit;
         state.view.score.textContent = state.values.result;
         state.values.hitPosition = null;
+        playSound("hit")
       }
     })
   })
 }
 
 function init() {
-
   addListennerHitBox()
-  // Adicionar um botão de start
-  // Fazer com que o tempo e o inimigo só agam quando apertar play
+
 }
 init();
