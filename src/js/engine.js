@@ -1,17 +1,35 @@
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.4.0/firebase-app.js';
+import { getFirestore, addDoc, collection } from 'https://www.gstatic.com/firebasejs/10.4.0/firebase-firestore.js';
+
 const state = {
   view: {
-    gamePanel: document.querySelector(".panel"),
-    startMenu: document.querySelector(".start-menu"),
-    squares: document.querySelectorAll(".square"),
-    enemy: document.querySelector(".enemy"),
+    // Displays (Global)
     timeLeft: document.querySelector("#time-left"),
     score: document.querySelector("#score"),
-    continuePage: document.querySelector(".continue-page"),
-    endGame: document.querySelector(".end-game"),
-    endGameMessage: document.querySelector("#result"),
     lives: document.querySelector("#lives"),
+    // Display (Start)
+    playerName: document.querySelector(".name"),
+    // Display (Game)
+    squares: document.querySelectorAll(".square"),
+    enemy: document.querySelector(".enemy"),
+    // Display (Continue)
     level: document.querySelector("#level"),
-    playerName: document.querySelector(".name")
+    // Display (Game Over)
+    endGameMessage: document.querySelector("#result"),
+    // Pages
+    startPage: document.querySelector(".start-page"),
+    gamePage: document.querySelector(".game-page"),
+    continuePage: document.querySelector(".continue-page"),
+    gameOverPage: document.querySelector(".game-over-page"),
+    statsPage: document.querySelector(".stats-page"),
+    rulesPage: document.querySelector(".rules-page"),
+    // Buttons
+    startButton: document.querySelector(".start"),
+    continueButton: document.querySelector(".continue"),
+    restartButton: document.querySelector(".restart"),
+    statsButton: document.querySelector(".stats"),
+    rulesButton: document.querySelector(".rules"),
+    closeBurron: document.querySelector(".close")
   },
   values: {
     level: 1,
@@ -27,13 +45,41 @@ const state = {
     matchTime: 20,
   }
 }
+const firebaseConfig = {
+  apiKey: "AIzaSyB-d2jTq_vYnCFcsXJI_xlXKSpJ4fJfRLo",
+  authDomain: "wreck-it-ralph-40324.firebaseapp.com",
+  projectId: "wreck-it-ralph-40324",
+  storageBucket: "wreck-it-ralph-40324.appspot.com",
+  messagingSenderId: "468588337668",
+  appId: "1:468588337668:web:1d23245615bbeec9aa3351"
+};
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const coll = "SCORES"
+
+async function FBFetchData (setFunction, ...args) {
+  const collectionName = args.join('/')
+  try{
+    const collectionRef = collection(db, collectionName);
+    const snapshot = await getDocs(collectionRef);
+
+    const dataFromFirestore = snapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
+    setFunction(dataFromFirestore);
+  } catch (error) {
+    console.error('Erro ao buscar dados:', error);
+  }
+};
+
 function countDown() {
   state.values.currentTime--;
   state.view.timeLeft.textContent = state.values.currentTime;
 
   if (state.values.currentTime<=0) {
     state.view.continuePage.style.display="flex";
-    state.view.gamePanel.style.display="none"
+    state.view.gamePage.style.display="none"
     clearInterval(state.values.countDownTimerId)
     clearInterval(state.values.timerId)
     state.values.currentTime = state.values.matchTime;
@@ -86,50 +132,55 @@ function loseLife () {
     return (state.values.lives<=0)?true:false   
   }
 }
-function gameOver () {
+async function gameOver () {
   clearInterval(state.values.countDownTimerId)
   clearInterval(state.values.timerId)
-  state.view.gamePanel.style.display="none"
-  state.view.endGame.style.display="flex"
+  state.view.gamePage.style.display="none"
+  state.view.gameOverPage.style.display="flex"
   state.view.endGameMessage.textContent=`Game over! O seu resultado foi ${state.values.result}`;
-  // TODO se o jogador tiver adicionado um nome, enviar o nome e a pontuação para o banco de dados
+  if (state.values.playerName !== null) {
+    await addDoc(collection(db, coll), 
+        {
+          playerName: state.values.playerName,
+          score: state.values.result,
+          date: new Date().toLocaleDateString('pt-BT', {day: 'numeric', month: '2-digit', year: 'numeric'}),        
+        }
+      );
+  }
   state.values.result = 0;
-  accelerateTheEnemy(clean=true)
+  accelerateTheEnemy(true)
 }
 function restart () {
-  state.view.startMenu.style.display="flex";
-  state.view.endGame.style.display="none";
-  state.view.playerName.value=state.values.playerName
-}
+  state.view.startPage.style.display="flex";
+  state.view.gameOverPage.style.display="none";
+  state.view.playerName.value=state.values.playerName;
 
+}
 function moveEnemy() {
   state.values.timerId = setInterval(randomSquare, state.values.enemyVelocity);
 }
 function startClock() {
   state.values.countDownTimerId = setInterval(countDown, 1000)
 }
-
-
-function startGame() {
-  if (state.view.startMenu.style.display!=="nome") {
-    state.view.startMenu.style.display="none";
-  }
-  if (state.view.continuePage.style.display!=="nome") {
-    state.view.continuePage.style.display="none";
-  }
-  if (state.view.endGame.style.display!=="nome") {
-    state.view.endGame.style.display="none";
-  }
-  state.view.gamePanel.style.display="flex";
+function playGame(currentPage) {
+  changePage(currentPage, "gamePage")
   state.values.playerName = state.view.playerName.value || null;
   moveEnemy();
   startClock();
 }
+function changePage(previousPage, currentPage) {
+  state.view[previousPage].style.display="none";
+  state.view[currentPage].style.display="flex";
+}
+
+
 
 function init() {
   state.view.lives.textContent = state.values.lives
+  state.view.startButton.addEventListener("click", e => playGame("startPage"))
+  state.view.continueButton.addEventListener("click", e => playGame("continuePage"))
+  state.view.restartButton.addEventListener("click", e => restart())
   addListennerHitBox()
-  // Zerar o tempo faz aumentar a pontuação por click e aumenta a velocidade do Ralph
   // Enviar o escore com o nome para o firebase
   // Fazer uma página de rank
   // fazer o Ralph desaparacer e aparecer

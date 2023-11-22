@@ -21,30 +21,28 @@
       </div>
       <div class="menu-score">
         <h2>Score</h2>
-        <h2 id="score">0</h2>
-        
+        <h2 id="score">0</h2>        
       </div>
       <div class="menu-lives">        
         <img src="./src/images/player.png" alt="">
         <h2>x<span id="lives"></span></h2>
-
       </div>
     </div>
-    <div class="start-menu">
+    <div class="start-page">
       <input type="text" class="name" placeholder="Digite seu apelido">
-      <button class="start" onclick="startGame()">START</button>
+      <button class="start">START</button>
       <button class="stats">STATISTICS</button>
       <button class="rules">RULES</button>
     </div>
     <div class="continue-page" style="display: none;">
       <h2>Proxímo nível <span id="level"></span></h2>
-      <button class="continue" onclick="startGame()">CONTINUE</button>
+      <button class="continue">CONTINUE</button>
     </div>
-    <div class="end-game" style="display: none">
+    <div class="game-over-page" style="display: none">
       <h2 id="result"></h2>
-      <button class="restart" onclick="restart()">RESTART</button>
+      <button class="restart">RESTART</button>
     </div>
-    <div class="panel">
+    <div class="game-page" style="display: none">
       <div class="panel-row">
         <div class="square" id="1"></div>
         <div class="square" id="2"></div>
@@ -62,6 +60,9 @@
       </div>
     </div>
   </main>
-  <script defer src="./src/js/engine.js"></script>
+  <script type="module" src="https://www.gstatic.com/firebasejs/10.4.0/firebase-app.js"></script>
+  <script type="module" src="https://www.gstatic.com/firebasejs/10.4.0/firebase-firestore.js"></script>
+
+  <script defer type="module" src="./src/js/engine.js"></script>
 </body>
 </html>
