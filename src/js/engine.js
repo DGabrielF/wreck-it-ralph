@@ -109,11 +109,11 @@ function randomSquare() {
   randomSquare.classList.add("enemy")
   state.values.hitPosition = randomSquare.id
 }
-// function playSound(audioName) {
-//   let audio = new Audio(`.src/audios/${audioName}.m4a`);
-//   audio.volume = 0.3;
-//   audio.play()
-// }
+function playSound(audioName) {
+  let audio = new Audio("./src/audios/hit.m4a");
+  audio.volume = 0.3;
+  audio.play()
+}
 
 function addListennerHitBox() {
   state.view.squares.forEach((square) => {
@@ -122,7 +122,7 @@ function addListennerHitBox() {
         state.values.score+=state.values.level;
         state.view.score.textContent = state.values.score;
         state.values.hitPosition = null;
-        // playSound("hit");
+        playSound("hit");
       } else if (square.id !== state.values.hitPosition) {
         state.values.missClicks++;
         const isAlive = loseLife();
