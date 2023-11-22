@@ -33,16 +33,19 @@ const state = {
   },
   values: {
     level: 1,
+    levelReset: 1,
     lives: 3,
+    livesReset: 3,
+    score: 0,
+    scoreReset:0,
     playerName: null,
     timerId: null,
     enemyVelocity: 1000,
     countDownTimerId: 1000,
     hitPosition: 0,
-    result: 0,
-    currentTime: 20,
+    currentTime: 5,
     missClicks: 0,
-    matchTime: 20,
+    matchTime: 5,
   }
 }
 const firebaseConfig = {
@@ -112,8 +115,8 @@ function addListennerHitBox() {
   state.view.squares.forEach((square) => {
     square.addEventListener("mousedown", () => {
       if (square.id === state.values.hitPosition) {
-        state.values.result+=state.values.level;
-        state.view.score.textContent = state.values.result;
+        state.values.score+=state.values.level;
+        state.view.score.textContent = state.values.score;
         state.values.hitPosition = null;
         // playSound("hit");
       } else if (square.id !== state.values.hitPosition) {
@@ -137,24 +140,34 @@ async function gameOver () {
   clearInterval(state.values.timerId)
   state.view.gamePage.style.display="none"
   state.view.gameOverPage.style.display="flex"
-  state.view.endGameMessage.textContent=`Game over! O seu resultado foi ${state.values.result}`;
+  state.view.endGameMessage.textContent=`Game over! O seu resultado foi ${state.values.score}`;
   if (state.values.playerName !== null) {
     await addDoc(collection(db, coll), 
         {
           playerName: state.values.playerName,
-          score: state.values.result,
+          score: state.values.score,
           date: new Date().toLocaleDateString('pt-BT', {day: 'numeric', month: '2-digit', year: 'numeric'}),        
         }
       );
   }
-  state.values.result = 0;
+  state.values.score = 0;
   accelerateTheEnemy(true)
 }
 function restart () {
   state.view.startPage.style.display="flex";
   state.view.gameOverPage.style.display="none";
   state.view.playerName.value=state.values.playerName;
+  
+  state.values.level = state.values.levelReset;
 
+  state.values.currentTime = state.values.matchTime;
+  state.view.timeLeft.textContent = state.values.currentTime;
+
+  state.values.lives = state.values.livesReset;
+  state.view.lives.textContent = state.values.livesReset;
+  
+  state.values.score = state.values.scoreReset;
+  state.view.score.textContent = state.values.scoreReset;
 }
 function moveEnemy() {
   state.values.timerId = setInterval(randomSquare, state.values.enemyVelocity);
@@ -173,15 +186,12 @@ function changePage(previousPage, currentPage) {
   state.view[currentPage].style.display="flex";
 }
 
-
-
 function init() {
   state.view.lives.textContent = state.values.lives
   state.view.startButton.addEventListener("click", e => playGame("startPage"))
   state.view.continueButton.addEventListener("click", e => playGame("continuePage"))
   state.view.restartButton.addEventListener("click", e => restart())
   addListennerHitBox()
-  // Enviar o escore com o nome para o firebase
   // Fazer uma página de rank
   // fazer o Ralph desaparacer e aparecer
   // Subir o projeto
