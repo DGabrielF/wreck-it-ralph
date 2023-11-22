@@ -93,11 +93,12 @@ function countDown() {
     clearInterval(state.values.countDownTimerId)
     clearInterval(state.values.timerId)
     state.values.currentTime = state.values.matchTime;
+    state.values.level++
     accelerateTheEnemy(false)
   }
 }
 function accelerateTheEnemy(clean=false) {
-  state.values.enemyVelocity = !clean?state.values.enemyVelocity-state.values.level:1000
+  state.values.enemyVelocity = !clean?state.values.enemyVelocity-2*state.values.level:1000
 
 }
 function randomSquare() {
