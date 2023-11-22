@@ -11,19 +11,20 @@ const state = {
     endGameMessage: document.querySelector("#result"),
     lives: document.querySelector("#lives"),
     level: document.querySelector("#level"),
+    playerName: document.querySelector(".name")
   },
   values: {
     level: 1,
     lives: 3,
+    playerName: null,
     timerId: null,
     enemyVelocity: 1000,
     countDownTimerId: 1000,
     hitPosition: 0,
     result: 0,
-    pointsPerHit: 1,
-    currentTime: 6,
+    currentTime: 20,
     missClicks: 0,
-    matchTime: 6,
+    matchTime: 20,
   }
 }
 function countDown() {
@@ -36,12 +37,16 @@ function countDown() {
     clearInterval(state.values.countDownTimerId)
     clearInterval(state.values.timerId)
     state.values.currentTime = state.values.matchTime;
+    accelerateTheEnemy(clean=false)
 
     // clearInterval(state.actions.timerId)
     // clearInterval(state.actions.countDownTimerId);
   }
 }
+function accelerateTheEnemy(clean=false) {
+  state.values.enemyVelocity = !clean?state.values.enemyVelocity-state.values.level:1000
 
+}
 function randomSquare() {
   state.view.squares.forEach((square) => {
     square.classList.remove("enemy")
@@ -61,7 +66,7 @@ function addListennerHitBox() {
   state.view.squares.forEach((square) => {
     square.addEventListener("mousedown", () => {
       if (square.id === state.values.hitPosition) {
-        state.values.result+=state.values.pointsPerHit;
+        state.values.result+=state.values.level;
         state.view.score.textContent = state.values.result;
         state.values.hitPosition = null;
         // playSound("hit");
@@ -89,9 +94,12 @@ function gameOver () {
   state.view.endGameMessage.textContent=`Game over! O seu resultado foi ${state.values.result}`;
   // TODO se o jogador tiver adicionado um nome, enviar o nome e a pontuação para o banco de dados
   state.values.result = 0;
+  accelerateTheEnemy(clean=true)
 }
-function resetSection () {
-
+function restart () {
+  state.view.startMenu.style.display="flex";
+  state.view.endGame.style.display="none";
+  state.view.playerName.value=state.values.playerName
 }
 
 function moveEnemy() {
@@ -113,6 +121,7 @@ function startGame() {
     state.view.endGame.style.display="none";
   }
   state.view.gamePanel.style.display="flex";
+  state.values.playerName = state.view.playerName.value || null;
   moveEnemy();
   startClock();
 }
@@ -120,7 +129,6 @@ function startGame() {
 function init() {
   state.view.lives.textContent = state.values.lives
   addListennerHitBox()
-  // Clicks errados fazer perder vida
   // Zerar o tempo faz aumentar a pontuação por click e aumenta a velocidade do Ralph
   // Enviar o escore com o nome para o firebase
   // Fazer uma página de rank
