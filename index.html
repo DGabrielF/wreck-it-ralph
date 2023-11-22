@@ -16,7 +16,7 @@
   <main>
     <div class="menu">
       <div class="menu-time">
-        <h2>Time Left</h2>
+        <h2>Time</h2>
         <h2 id="time-left">0</h2>
       </div>
       <div class="menu-score">
@@ -28,20 +28,16 @@
         <h2>x<span id="lives"></span></h2>
       </div>
     </div>
+
     <div class="start-page">
-      <input type="text" class="name" placeholder="Digite seu apelido">
+      <h3>Seu apelido</h3>
+      <input type="text" class="name" placeholder="Felix">
+      <span id="alert">*Necessário para entrar no ranking</span>
       <button class="start">START</button>
-      <button class="stats">STATISTICS</button>
+      <button class="stats">RANKING</button>
       <button class="rules">RULES</button>
     </div>
-    <div class="continue-page" style="display: none;">
-      <h2>Proxímo nível <span id="level"></span></h2>
-      <button class="continue">CONTINUE</button>
-    </div>
-    <div class="game-over-page" style="display: none">
-      <h2 id="result"></h2>
-      <button class="restart">RESTART</button>
-    </div>
+    
     <div class="game-page" style="display: none">
       <div class="panel-row">
         <div class="square" id="1"></div>
@@ -59,6 +55,33 @@
         <div class="square" id="9"></div>
       </div>
     </div>
+    
+    <div class="continue-page" style="display: none;">
+      <h2>Proxímo nível <span id="level"></span></h2>
+      <button class="continue">CONTINUE</button>
+    </div>
+
+    <div class="game-over-page" style="display: none">
+      <h2 id="result"></h2>
+      <button class="restart">RESTART</button>
+    </div>
+
+    <div class="rules-page" style="display: none; flex-direction: column;">
+      <h3>Com o passar dos níveis o Ralph ficará mais rápido e o acertos velerão mais pontos</h3>
+      <h3>A vida é reduzida quando uma certa quantidade de clicks errados é acumulada</h3>
+      <h3>Para aperecer no ranking o jogador <span style="color: #ff0000; ">DEVE ADICIONAR UM APELIDO</span> para o registro</h3>
+      <button class="rule-close">BACK</button>
+    </div>
+    
+    <div class="stats-page" style="display: none; flex-direction: column;">
+      <ol class="ranking"></ol>
+      <button class="stats-close">BACK</button>
+    </div>
+
+    <div class="waiting-page" style="display: none;">
+      <h3>Carregando<h3 id="dots"></h2></h2>
+    </div>
+
   </main>
   <script type="module" src="https://www.gstatic.com/firebasejs/10.4.0/firebase-app.js"></script>
   <script type="module" src="https://www.gstatic.com/firebasejs/10.4.0/firebase-firestore.js"></script>

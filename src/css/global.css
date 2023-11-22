@@ -22,14 +22,18 @@ main {
   justify-content: center;
 }
 .square {
-  height: 150px;
-  width: 150px;
+  height: 130px;
+  width: 130px;
   border: 1px solid #000000;
   background-color: #7fffd4;
 }
 .enemy {
   background-image: url("../images/ralph.png");
   background-size: cover;
+}
+.menu-score,
+.menu-time {
+  text-align: center;
 }
 .menu-lives {
   display: flex;
@@ -41,21 +45,32 @@ div h2:nth-child(1) {
   color: #ff0000;
 }
 img {
- height: 60px;
+ height: 50px;
 }
-.start-page, .continue-page, .game-over-page{
-  width: 450px;
+.start-page,
+.continue-page,
+.game-over-page,
+.waiting-page,
+.stats-page,
+.rules-page{
+  width: 90%;
   margin: 15px auto 0;
   display: flex;
   flex-direction: column;
+  text-align: center;
+  border: 1px solid #00000060;
+  border-radius: 5px;
+  background-color: #00000050;
+  padding: 1rem;
 }
 .start-page .name {
   text-align: center;
   border: 1px solid #000000;
   border-radius: 4px;
-  padding: .25rem;
+  padding: .35rem;
 }
 .start-page button,
+.rules-page button,
 .game-over-page button,
 .continue-page button {
   margin-top: .8rem;
@@ -65,4 +80,22 @@ img {
 }
 .continue-page h2 {
   text-align: center;
+}
+h3 {
+  color: #ffffff;
+  margin: 1.5rem 0 ;
+}
+.ranking {
+  list-style-type: none;
+}
+li {
+  color: #ffffff;
+  margin: 1rem 0;
+  display: flex;
+  justify-content: space-between;
+}
+#alert {
+  color: #ffffff;
+  font-size: x-small;
+  margin: 1rem 0;
 }
