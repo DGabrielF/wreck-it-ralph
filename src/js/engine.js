@@ -115,21 +115,22 @@ function playSound(audioName) {
   audio.volume = 0.3;
   audio.play()
 }
-
+function testHit(square){
+  if (square.id === state.values.hitPosition) {
+    state.values.score+=state.values.level;
+    state.view.score.textContent = state.values.score;
+    state.values.hitPosition = null;
+    playSound("hit");
+  } else if (square.id !== state.values.hitPosition) {
+    state.values.missClicks++;
+    const isAlive = loseLife();
+    if (isAlive) { gameOver() }        
+  }
+}
 function addListennerHitBox() {
   state.view.squares.forEach((square) => {
-    square.addEventListener("mousedown", () => {
-      if (square.id === state.values.hitPosition) {
-        state.values.score+=state.values.level;
-        state.view.score.textContent = state.values.score;
-        state.values.hitPosition = null;
-        playSound("hit");
-      } else if (square.id !== state.values.hitPosition) {
-        state.values.missClicks++;
-        const isAlive = loseLife();
-        if (isAlive) { gameOver() }        
-      }
-    })
+    square.addEventListener("mousedown", () => testHit(square))
+    square.addEventListener("touchstart", () => testHit(square))
   })
 }
 function loseLife () {
