@@ -70,13 +70,14 @@ img {
   padding: .35rem;
 }
 .start-page button,
+.stats-page button,
 .rules-page button,
 .game-over-page button,
 .continue-page button {
   margin-top: .8rem;
   border: 1px solid #000000;
   border-radius: 4px;
-  padding: .25rem;
+  padding: 1rem;
 }
 .continue-page h2 {
   text-align: center;

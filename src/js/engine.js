@@ -129,8 +129,7 @@ function testHit(square){
 }
 function addListennerHitBox() {
   state.view.squares.forEach((square) => {
-    square.addEventListener("mousedown", () => testHit(square))
-    square.addEventListener("touchstart", () => testHit(square))
+    square.addEventListener("click", () => testHit(square));
   })
 }
 function loseLife () {
