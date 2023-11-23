@@ -7,6 +7,8 @@ const state = {
     timeLeft: document.querySelector("#time-left"),
     score: document.querySelector("#score"),
     lives: document.querySelector("#lives"),
+    sound: document.querySelector(".sound"),
+    lang: document.querySelector(".lang"),
     // Display (Start)
     playerName: document.querySelector(".name"),
     // Display (Game)
@@ -55,6 +57,9 @@ const state = {
     topTenRanking: [],
     dots: 0,
     dotInterval: null,
+    soundOn: true,
+    soundVolume: 0.2,
+    lang: "pt-br"
   }
 }
 const firebaseConfig = {
@@ -113,7 +118,7 @@ function randomSquare() {
 }
 function playSound(audioName) {
   let audio = new Audio("./src/audios/hit.m4a");
-  audio.volume = 0.3;
+  audio.volume = state.values.soundVolume;
   audio.play()
 }
 function testHit(square){
@@ -121,7 +126,9 @@ function testHit(square){
     state.values.score+=state.values.level;
     state.view.score.textContent = state.values.score;
     state.values.hitPosition = null;
-    playSound("hit");
+    if (state.values.soundOn) {
+      playSound("hit");
+    }
   } else if (square.id !== state.values.hitPosition) {
     state.values.missClicks++;
     const isAlive = loseLife();
@@ -247,24 +254,36 @@ function closeStats() {
   state.values.rankingList = [];
   state.values.topTenRanking = [];
   while (state.view.ranking.firstChild) {
-    console.log(state.view.ranking)
     state.view.ranking.removeChild(state.view.ranking.firstChild)
   }
   state.view.ranking.innerHTML = "";
   backToMenu()
 }
+function handleSound() {
+  (state.values.soundOn)?
+  state.view.sound.innerHTML = 
+    `<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#f4f1f1" viewBox="0 0 256 256">
+      <path d="M56.88,31.93A12,12,0,1,0,39.12,48.07L64.51,76H32A20,20,0,0,0,12,96v64a20,20,0,0,0,20,20H75.88l68.75,53.47A12,12,0,0,0,164,224V185.44l35.12,38.63a12,12,0,0,0,17.76-16.14ZM36,100H68v56H36Zm104,99.46L92,162.13V106.24L140,159Zm-31-134a12,12,0,0,1,2.11-16.84l33.51-26.07A12,12,0,0,1,164,32V94.94a12,12,0,0,1-24,0V56.54l-14.15,11A12,12,0,0,1,109,65.44Zm74,49.35a12,12,0,0,1,18-15.85,44,44,0,0,1,5.55,50.21,12,12,0,0,1-21-11.55A19.67,19.67,0,0,0,188,128,20,20,0,0,0,183,114.79ZM252,128a84.18,84.18,0,0,1-19.11,53.35,12,12,0,1,1-18.53-15.25A60,60,0,0,0,212.73,88a12,12,0,1,1,17.88-16A83.87,83.87,0,0,1,252,128Z"></path>
+    </svg>`:
+  state.view.sound.innerHTML = 
+    `<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#f4f1f1" viewBox="0 0 256 256">
+      <path d="M157.27,21.22a12,12,0,0,0-12.64,1.31L75.88,76H32A20,20,0,0,0,12,96v64a20,20,0,0,0,20,20H75.88l68.75,53.47A12,12,0,0,0,164,224V32A12,12,0,0,0,157.27,21.22ZM36,100H68v56H36Zm104,99.46L92,162.13V93.87l48-37.33ZM212,128a44,44,0,0,1-11,29.11,12,12,0,1,1-18-15.88,20,20,0,0,0,0-26.43,12,12,0,0,1,18-15.86A43.94,43.94,0,0,1,212,128Zm40,0a83.87,83.87,0,0,1-21.39,56,12,12,0,0,1-17.89-16,60,60,0,0,0,0-80,12,12,0,1,1,17.88-16A83.87,83.87,0,0,1,252,128Z"></path>
+    </svg>`    
+  state.values.soundOn = !state.values.soundOn;
+}
+
 function init() {
-  state.view.lives.textContent = state.values.lives
-  state.view.startButton.addEventListener("click", e => playGame("startPage"))
-  state.view.continueButton.addEventListener("click", e => playGame("continuePage"))
-  state.view.restartButton.addEventListener("click", e => restart())
-  state.view.statsButton.addEventListener("click", e => waiting())
-  state.view.rulesButton.addEventListener("click", e => changePage("startPage", "rulesPage"))
-  state.view.statsCloseButton.addEventListener("click", e => closeStats())
-  state.view.rulesCloseButton.addEventListener("click", e => backToMenu())
+  state.view.lives.textContent = state.values.lives;
+  state.view.startButton.addEventListener("click", e => playGame("startPage"));
+  state.view.continueButton.addEventListener("click", e => playGame("continuePage"));
+  state.view.restartButton.addEventListener("click", e => restart());
+  state.view.statsButton.addEventListener("click", e => waiting());
+  state.view.rulesButton.addEventListener("click", e => changePage("startPage", "rulesPage"));
+  state.view.statsCloseButton.addEventListener("click", e => closeStats());
+  state.view.rulesCloseButton.addEventListener("click", e => backToMenu());
+
+  state.view.sound.addEventListener("click", e => handleSound());
   addListennerHitBox()
-  // Fazer uma página de rank
-  // fazer o Ralph desaparacer e aparecer
-  // Subir o projeto
+  handleSound()
 }
 init();

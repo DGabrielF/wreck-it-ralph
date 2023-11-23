@@ -16,11 +16,11 @@
   <main>
     <div class="menu">
       <div class="menu-time">
-        <h2>Time</h2>
+        <h2>Tempo</h2>
         <h2 id="time-left">0</h2>
       </div>
       <div class="menu-score">
-        <h2>Score</h2>
+        <h2>Pontos</h2>
         <h2 id="score">0</h2>        
       </div>
       <div class="menu-lives">        
@@ -30,12 +30,16 @@
     </div>
     
     <div class="start-page">
-      <h3>Your Nickname</h3>
+      <h3>Seu apelido</h3>
       <input type="text" class="name" placeholder="ex.: Felix">
-      <span id="alert">*Required to be part of the ranking</span>
-      <button class="start">START</button>
-      <button class="stats">RANKING</button>
-      <button class="rules">RULES</button>
+      <span id="alert">*Necessário para fazer parte da classificação</span>
+      <button class="start">INÍCIO</button>
+      <button class="stats">CLASSIFICAÇÃO</button>
+      <button class="rules">REGRAS</button>
+      <div class="configs">
+        <!-- <div class="lang" style="color: #ffffff;"></div> -->
+        <div class="sound"></div>
+      </div>
     </div>
     
     <div class="game-page" style="display: none">
@@ -57,20 +61,20 @@
     </div>
     
     <div class="continue-page" style="display: none;">
-      <h2>Next level <span id="level"></span></h2>
-      <button class="continue">CONTINUE</button>
+      <h2>Próximo nível <span id="level"></span></h2>
+      <button class="continue">CONTINUAR</button>
     </div>
 
     <div class="game-over-page" style="display: none">
       <h2 id="result"></h2>
-      <button class="restart">RESTART</button>
+      <button class="restart">REINICIAR</button>
     </div>
 
     <div class="rules-page" style="display: none; flex-direction: column;">
-      <h3>Ralph will get faster as the levels pass</h3>
-      <h3>With a certain number of wrong clicks you will lose lives</h3>
-      <h3>Only completed matches will be considered for the ranking</h3>
-      <h3>It is necessary <span style="color: #ff0000; ">TO INSERT A NICKNAME</span> to be part of the ranking</h3>
+      <h3>O Ralph fica mais rápido à medida que os níveis passam</h3>
+      <h3>Com um certo número de cliques errados,você perderá vidas</h3>
+      <h3>Apenas as partidas concluídas serão considerados para a classificação</h3>
+      <h3>É necessário <span style="color: #ff0000; ">INSERIR UM APELIDO</span> para fazer parte da classificação</h3>
       <button class="rule-close">BACK</button>
     </div>
     
