@@ -52,6 +52,7 @@ const state = {
     missClicks: 0,
     matchTime: 15,
     rankingList: [],
+    topTenRanking: [],
     dots: 0,
     dotInterval: null,
   }
@@ -199,7 +200,7 @@ function backToMenu() {
 function ranking() {
   clearInterval(state.values.dotInterval)
   changePage("waitingPage", "statsPage");
-  let topTenRanking = state.values.rankingList.sort((a, b) => {
+  state.values.topTenRanking = state.values.rankingList.sort((a, b) => {
     if (a.score < b.score) {
       return 1;
     }
@@ -216,7 +217,7 @@ function ranking() {
     }
     return 0
   }).slice(0, 10)
-  topTenRanking.forEach((result, index) => {
+  state.values.topTenRanking.forEach((result, index) => {
     const item = document.createElement("li");
 
     const positionName = document.createElement("h3");
@@ -238,11 +239,19 @@ function changeDots() {
 }
 async function waiting() {
   changePage("startPage", "waitingPage");
-  state.values.dotInterval = setInterval(changeDots, 500);
-  
-  await FBFetchData();
-  
+  state.values.dotInterval = setInterval(changeDots, 500);  
+  await FBFetchData();  
   ranking()
+}
+function closeStats() {
+  state.values.rankingList = [];
+  state.values.topTenRanking = [];
+  while (state.view.ranking.firstChild) {
+    console.log(state.view.ranking)
+    state.view.ranking.removeChild(state.view.ranking.firstChild)
+  }
+  state.view.ranking.innerHTML = "";
+  backToMenu()
 }
 function init() {
   state.view.lives.textContent = state.values.lives
@@ -251,7 +260,7 @@ function init() {
   state.view.restartButton.addEventListener("click", e => restart())
   state.view.statsButton.addEventListener("click", e => waiting())
   state.view.rulesButton.addEventListener("click", e => changePage("startPage", "rulesPage"))
-  state.view.statsCloseButton.addEventListener("click", e => backToMenu())
+  state.view.statsCloseButton.addEventListener("click", e => closeStats())
   state.view.rulesCloseButton.addEventListener("click", e => backToMenu())
   addListennerHitBox()
   // Fazer uma página de rank
