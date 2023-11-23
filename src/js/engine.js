@@ -220,7 +220,7 @@ function ranking() {
     const item = document.createElement("li");
 
     const positionName = document.createElement("h3");
-    positionName.textContent = `#${index +1} ${result.playerName}:`;
+    positionName.textContent = `#${index +1}  ${result.playerName}`;
     item.appendChild(positionName)
     
     const score = document.createElement("h3");
